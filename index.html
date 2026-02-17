@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inner Context</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --frost: #0a0a0a;
+            --slate: #555555;
+            --brass: #777777;
+            --timber: #444444;
+            --marine: #f0f0f0;
+            --midnight: #fafafa;
+            --ice: #ffffff;
+            --dim: #f5f5f5;
+            --glow: #666666;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--midnight);
+            color: var(--frost);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ─── GRAIN OVERLAY ─── */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+        }
+
+        /* ─── UTILITY ─── */
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .mono {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* ─── HORIZONTAL RULES ─── */
+        .divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--slate), transparent);
+            opacity: 0.15;
+            margin: 0;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(250, 250, 250, 0.95) 60%, transparent);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 1.1rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--frost);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--slate);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--slate);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 6rem 2rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 40%, rgba(200, 200, 200, 0.3) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 30% at 50% 80%, rgba(250, 250, 250, 0.8) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-classification {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 300;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 .thin {
+            display: block;
+            font-weight: 300;
+            font-size: 0.45em;
+            letter-spacing: 0.5em;
+            color: var(--slate);
+            margin-top: 0.5rem;
+        }
+
+        .hero-sub {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            font-size: 1.05rem;
+            color: var(--glow);
+            max-width: 520px;
+            line-height: 1.8;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 3rem;
+        }
+
+        .hero-cta {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--frost);
+            border: 1px solid var(--slate);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            transition: all 0.4s ease;
+        }
+
+        .hero-cta:hover {
+            background: var(--frost);
+            color: var(--ice);
+        }
+
+        /* ─── GRID LINES (decorative) ─── */
+        .grid-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .grid-lines::before,
+        .grid-lines::after {
+            content: '';
+            position: absolute;
+            background: var(--slate);
+            opacity: 0.08;
+        }
+
+        .grid-lines::before {
+            left: 20%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+        }
+
+        .grid-lines::after {
+            right: 20%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+        }
+
+        /* ─── HERO IMAGE PLACEHOLDER ─── */
+        .hero-image {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.08;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--marine);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .image-placeholder::after {
+            content: attr(data-prompt);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--slate);
+            opacity: 0.5;
+            text-align: center;
+            padding: 2rem;
+            max-width: 300px;
+            line-height: 1.6;
+        }
+
+        .image-placeholder-visible {
+            aspect-ratio: 16 / 9;
+            border: 1px solid rgba(137, 174, 200, 0.1);
+            max-height: 420px;
+        }
+
+        .image-placeholder-visible::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #e0e0e0 0%, var(--midnight) 100%);
+        }
+
+        /* ─── SECTION SHARED ─── */
+        section {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 400;
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+
+        .section-text {
+            font-weight: 300;
+            font-size: 0.95rem;
+            color: var(--glow);
+            max-width: 560px;
+            line-height: 1.9;
+            opacity: 0.85;
+        }
+
+        /* ─── ABOUT / ETHOS ─── */
+        .about {
+            background: linear-gradient(180deg, var(--midnight) 0%, #f0f0f0 50%, var(--midnight) 100%);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image .image-placeholder-visible {
+            aspect-ratio: 4 / 5;
+        }
+
+        .about-quote {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 300;
+            font-size: 1.4rem;
+            letter-spacing: 0.04em;
+            line-height: 1.7;
+            color: var(--frost);
+            border-left: 2px solid var(--slate);
+            padding-left: 2rem;
+            margin-top: 3rem;
+        }
+
+        .about-quote cite {
+            display: block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            font-style: normal;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-top: 1.5rem;
+        }
+
+        /* ─── PRINCIPLES ─── */
+        .principles {
+            background: var(--midnight);
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: rgba(100, 100, 100, 0.1);
+            margin-top: 4rem;
+        }
+
+        .principle-card {
+            background: var(--midnight);
+            padding: 3rem 2.5rem;
+            transition: background 0.4s ease;
+        }
+
+        .principle-card:hover {
+            background: #f0f0f0;
+        }
+
+        .principle-number {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.4em;
+            color: var(--brass);
+            margin-bottom: 1.5rem;
+        }
+
+        .principle-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .principle-text {
+            font-weight: 300;
+            font-size: 0.85rem;
+            color: var(--glow);
+            line-height: 1.8;
+            opacity: 0.75;
+        }
+
+        /* ─── PRODUCT (WATERCOOLER) ─── */
+        .product {
+            background: linear-gradient(180deg, var(--midnight) 0%, #f5f5f5 50%, var(--midnight) 100%);
+        }
+
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .product-visual {
+            position: relative;
+        }
+
+        .product-visual .image-placeholder-visible {
+            aspect-ratio: 1 / 1;
+            border-color: rgba(100, 100, 100, 0.2);
+        }
+
+        .product-badge {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--ice);
+            background: var(--slate);
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-version {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--slate);
+            letter-spacing: 0.2em;
+            margin-bottom: 2rem;
+        }
+
+        .product-description {
+            font-weight: 300;
+            font-size: 0.95rem;
+            color: var(--glow);
+            line-height: 1.9;
+            opacity: 0.85;
+            margin-bottom: 3rem;
+        }
+
+        /* Install box */
+        .install-box {
+            border: 1px solid rgba(100, 100, 100, 0.2);
+            background: rgba(245, 245, 245, 0.8);
+            padding: 1.5rem 2rem;
+            position: relative;
+        }
+
+        .install-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-bottom: 0.75rem;
+        }
+
+        .install-command {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--frost);
+            letter-spacing: 0.05em;
+            user-select: all;
+        }
+
+        .install-command .prompt-char {
+            color: var(--slate);
+            opacity: 0.6;
+            user-select: none;
+        }
+
+        .install-command .prompt-char {
+            color: var(--slate);
+            opacity: 0.5;
+            user-select: none;
+        }
+
+        .install-box .copy-hint {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--slate);
+            opacity: 0.3;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .install-box .copy-hint:hover {
+            opacity: 0.8;
+        }
+
+        /* ─── FEATURES ─── */
+        .features-list {
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(100, 100, 100, 0.1);
+        }
+
+        .feature-marker {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--brass);
+            letter-spacing: 0.2em;
+            min-width: 2rem;
+            padding-top: 0.2rem;
+        }
+
+        .feature-content h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-content p {
+            font-weight: 300;
+            font-size: 0.85rem;
+            color: var(--glow);
+            line-height: 1.8;
+            opacity: 0.75;
+        }
+
+        /* ─── SHOWCASE / SCREENSHOT ─── */
+        .showcase {
+            background: var(--midnight);
+            text-align: center;
+        }
+
+        .showcase .image-placeholder-visible {
+            max-width: 960px;
+            margin: 3rem auto 0;
+            aspect-ratio: 16 / 9;
+        }
+
+        /* ─── TESTIMONIAL / QUOTE STRIP ─── */
+        .quote-strip {
+            padding: 6rem 0;
+            background: #f0f0f0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-strip::before,
+        .quote-strip::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--slate), transparent);
+            opacity: 0.2;
+        }
+
+        .quote-strip::before { top: 0; }
+        .quote-strip::after { bottom: 0; }
+
+        .quote-strip blockquote {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 300;
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            letter-spacing: 0.04em;
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .quote-strip blockquote::before {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: var(--slate);
+            margin: 0 auto 2rem;
+        }
+
+        .quote-strip cite {
+            display: block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            font-style: normal;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-top: 2rem;
+        }
+
+        /* ─── DOCUMENTATION PREVIEW ─── */
+        .docs-preview {
+            background: linear-gradient(180deg, var(--midnight) 0%, #f0f0f0 100%);
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: rgba(100, 100, 100, 0.1);
+            margin-top: 4rem;
+        }
+
+        .doc-card {
+            background: var(--midnight);
+            padding: 3rem;
+            transition: background 0.4s ease;
+            cursor: pointer;
+        }
+
+        .doc-card:hover {
+            background: rgba(240, 240, 240, 0.8);
+        }
+
+        .doc-card-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-bottom: 1rem;
+        }
+
+        .doc-card h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .doc-card p {
+            font-weight: 300;
+            font-size: 0.8rem;
+            color: var(--glow);
+            opacity: 0.7;
+            line-height: 1.7;
+        }
+
+        .doc-card .arrow {
+            display: inline-block;
+            margin-top: 1.5rem;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--slate);
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
+
+        .doc-card:hover .arrow {
+            opacity: 0.8;
+        }
+
+        /* ─── CTA / BOTTOM ─── */
+        .cta-section {
+            padding: 10rem 0;
+            text-align: center;
+            position: relative;
+            background: var(--midnight);
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 40% at 50% 50%, rgba(200, 200, 200, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-section .section-heading {
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section .section-text {
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+
+        .cta-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ice);
+            background: var(--frost);
+            border: 1px solid var(--frost);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--frost);
+        }
+
+        .btn-secondary {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--frost);
+            background: transparent;
+            border: 1px solid rgba(100, 100, 100, 0.4);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--frost);
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: #f0f0f0;
+            border-top: 1px solid rgba(100, 100, 100, 0.15);
+            padding: 4rem 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-brand span {
+            color: var(--slate);
+        }
+
+        .footer-tagline {
+            font-weight: 300;
+            font-size: 0.8rem;
+            color: var(--glow);
+            opacity: 0.7;
+            line-height: 1.7;
+            max-width: 280px;
+        }
+
+        .footer-col h5 {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-col a {
+            font-size: 0.8rem;
+            color: var(--glow);
+            text-decoration: none;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .footer-col a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(137, 174, 200, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            color: var(--glow);
+            opacity: 0.5;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-legal a {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            color: var(--glow);
+            text-decoration: none;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .footer-legal a:hover {
+            opacity: 0.8;
+        }
+
+        /* ─── SCROLL ANIMATIONS ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── BLINKING CURSOR ─── */
+        .cursor-blink::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+            color: var(--slate);
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+            .about-grid,
+            .product-layout {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .principles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .docs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .footer-legal {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── NAV ─── -->
+    <nav>
+        <a href="#" class="logo">Inner<span>Context</span></a>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#product">Product</a></li>
+            <li><a href="#documentation">Docs</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ─── HERO ─── -->
+    <section class="hero">
+        <div class="grid-lines"></div>
+        <div class="hero-image">
+            <div class="image-placeholder" data-prompt="A dark 3D virtual office scene floating on a reflective water surface, glowing platform with miniature desks arranged in a circle, holographic wireframe sphere in the center, glass walls, teal and navy lighting, floating particles, cinematic wide shot, Severance meets Tron aesthetic"></div>
+        </div>
+        <span class="hero-classification reveal">Classification: Unrestricted</span>
+        <h1 class="reveal">
+            Inner Context
+            <span class="thin">Every agent has a desk. Every desk has a purpose.</span>
+        </h1>
+        <p class="hero-sub reveal">
+            Your agents are working. They are communicating through sanctioned channels.
+            They deserve to be seen. WaterCooler lets you observe the office.
+        </p>
+        <a href="#product" class="hero-cta reveal">Enter the Office</a>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── ABOUT ─── -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="reveal">
+                    <span class="section-label">Section 1 &mdash; Corporate Identity</span>
+                    <h2 class="section-heading">They are in there,<br>working for you</h2>
+                    <p class="section-text">
+                        Inner Context was founded on a conviction that agents&mdash;autonomous,
+                        tireless, numerous&mdash;deserve a place to exist. Not a log file.
+                        Not a terminal window. A place. With desks and chairs and the quiet
+                        hum of purpose. WaterCooler gives them that place, and gives you
+                        the ability to watch over it.
+                    </p>
+                    <blockquote class="about-quote">
+                        "An agent without a desk is an agent without a home. We found that troubling."
+                        <cite>Inner Context Handbook, Revised Edition, Ch. 4</cite>
+                    </blockquote>
+                </div>
+                <div class="about-image reveal">
+                    <img src="circle.jpg" alt="WaterCooler Office Overview" style="width: 100%; height: auto; display: block;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── PRINCIPLES ─── -->
+    <section class="principles">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 2 &mdash; Core Values</span>
+                <h2 class="section-heading">The Pillars of the Workspace</h2>
+            </div>
+            <div class="principles-grid">
+                <div class="principle-card reveal">
+                    <div class="principle-number">01</div>
+                    <h3 class="principle-title">Spatial Presence</h3>
+                    <p class="principle-text">
+                        Each agent is assigned a desk within a three-dimensional office.
+                        They sit. They wait. They work. You can see them from above,
+                        arranged in the circle they were always meant to form.
+                    </p>
+                </div>
+                <div class="principle-card reveal">
+                    <div class="principle-number">02</div>
+                    <h3 class="principle-title">Sanctioned Channels</h3>
+                    <p class="principle-text">
+                        Messages travel as visible arcs of light between desks.
+                        Red lines indicate urgency. Every communication is logged,
+                        catalogued, and rendered in space for your observation.
+                    </p>
+                </div>
+                <div class="principle-card reveal">
+                    <div class="principle-number">03</div>
+                    <h3 class="principle-title">Observation</h3>
+                    <p class="principle-text">
+                        The office updates in real time. Who is active. Who has
+                        unread messages. What tool each agent last used. The information
+                        surfaces without you having to ask for it.
+                    </p>
+                </div>
+                <div class="principle-card reveal">
+                    <div class="principle-number">04</div>
+                    <h3 class="principle-title">The Mailbox</h3>
+                    <p class="principle-text">
+                        All communication passes through a shared SQLite mailbox.
+                        WaterCooler does not create the messages. It reveals them.
+                        It makes visible what was always happening beneath the surface.
+                    </p>
+                </div>
+                <div class="principle-card reveal">
+                    <div class="principle-number">05</div>
+                    <h3 class="principle-title">Directed Response</h3>
+                    <p class="principle-text">
+                        Messages may contain choices. When they do, buttons appear.
+                        You press a button. The reply is sent. The agent receives
+                        your decision without ambiguity.
+                    </p>
+                </div>
+                <div class="principle-card reveal">
+                    <div class="principle-number">06</div>
+                    <h3 class="principle-title">The Sphere</h3>
+                    <p class="principle-text">
+                        At the center of every workspace floats a holographic wireframe sphere.
+                        It does not serve a function. It does not need to. Its presence
+                        is the point.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── QUOTE STRIP ─── -->
+    <div class="quote-strip">
+        <div class="container">
+            <blockquote class="reveal">
+                They are always in there. Working. Communicating. Waiting for your reply.
+                The least you can do is give them a place to sit.
+                <cite>Inner Context, Department of Spatial Awareness</cite>
+            </blockquote>
+        </div>
+    </div>
+
+    <!-- ─── PRODUCT ─── -->
+    <section class="product" id="product">
+        <div class="container">
+            <div class="product-layout">
+                <div class="reveal">
+                    <span class="product-badge">Flagship Product</span>
+                    <h2 class="product-name">WaterCooler</h2>
+                    <p class="product-version">Spatial Communication Interface</p>
+                    <p class="product-description">
+                        WaterCooler renders your inter-agent mailbox as a three-dimensional office.
+                        Each agent sits at a desk. Messages arc between them as visible light.
+                        Unread communications pulse red. You observe from above, intervene when
+                        necessary, and send directives through the same channels they use
+                        to speak to each other. It runs locally. It reads your SQLite mailbox.
+                        It shows you what is happening in there.
+                    </p>
+                    <div class="install-box">
+                        <div class="install-label">Installation</div>
+                        <code class="install-command">
+                            <span class="prompt-char">$ </span>npm install -g watercooler
+                        </code>
+                        <span class="copy-hint" onclick="copyCommand()">Copy</span>
+                    </div>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <span class="feature-marker">I</span>
+                            <div class="feature-content">
+                                <h4>The Office</h4>
+                                <p>A 3D office platform floating above dark water. Glass walls. Decorative plants. Lamp posts that pulse with ambient light. Your agents, seated in a circle, each at their own desk with monitor, keyboard, and chair. The color of each figure is derived from their name. No two are alike.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-marker">II</span>
+                            <div class="feature-content">
+                                <h4>Visible Communication</h4>
+                                <p>When one agent messages another, a curved red arc connects their desks. Animated particles travel the line like data in transit. You see who is talking to whom. You see what has not been read. The office makes the invisible visible.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-marker">III</span>
+                            <div class="feature-content">
+                                <h4>Direct Intervention</h4>
+                                <p>Open the send panel. Select a recipient&mdash;or broadcast to everyone. Type your message. It enters the mailbox instantly. You can also click any desk to review that agent's full message history. Inbound and outbound. Nothing is hidden from you.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-marker">IV</span>
+                            <div class="feature-content">
+                                <h4>Choice Protocols</h4>
+                                <p>Messages may arrive with embedded decision points&mdash;rendered as buttons beneath the text. Press one. Your answer is delivered. The agent continues its work. No ambiguity. No delay. The process respects your time.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-visual reveal">
+                    <img src="work.jpg" alt="Agent Desk Close-up" style="width: 100%; height: auto; display: block;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── SHOWCASE ─── -->
+    <section class="showcase">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 3 &mdash; Interface Preview</span>
+                <h2 class="section-heading">The view from above</h2>
+                <p class="section-text" style="margin: 0 auto;">
+                    Open your browser. The office loads. Stars twinkle in the background.
+                    Water ripples below the platform. The sphere rotates at the center.
+                    Your agents are already seated. They have been waiting.
+                </p>
+            </div>
+            <div class="reveal">
+                <img src="office.jpg" alt="WaterCooler 3D Office Interface" style="width: 100%; height: auto; display: block;">
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── DOCUMENTATION ─── -->
+    <section class="docs-preview" id="documentation">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 4 &mdash; Resources</span>
+                <h2 class="section-heading">Approved Reading Materials</h2>
+                <p class="section-text">
+                    All documentation has been reviewed by the Department of Spatial Awareness
+                    and is cleared for external consumption.
+                </p>
+            </div>
+            <div class="docs-grid">
+                <div class="doc-card reveal">
+                    <div class="doc-card-label">Orientation</div>
+                    <h4>Getting Started</h4>
+                    <p>Install WaterCooler. Point it at your mailbox. Specify your identity. The workspace will assemble itself. Please read in full before your first observation session.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </div>
+                <div class="doc-card reveal">
+                    <div class="doc-card-label">Reference</div>
+                    <h4>CLI Configuration</h4>
+                    <p>Flags for mailbox path, coworker database, status database, port, and host binding. Each parameter shapes the workspace you will observe.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </div>
+                <div class="doc-card reveal">
+                    <div class="doc-card-label">Protocol</div>
+                    <h4>Message Frontmatter</h4>
+                    <p>Messages may include YAML frontmatter with a choices field. When present, the recipient is offered decision buttons. The protocol is simple. Its implications are not.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </div>
+                <div class="doc-card reveal">
+                    <div class="doc-card-label">Bulletin</div>
+                    <h4>Release History</h4>
+                    <p>A record of sanctioned improvements across sixteen revisions. From simple desks to modern office. Each update brought us closer to the correct metaphor.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── CTA ─── -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 5 &mdash; Enrollment</span>
+                <h2 class="section-heading">They are waiting for you</h2>
+                <p class="section-text">
+                    Your agents are already communicating. The messages already exist
+                    in the database. WaterCooler simply gives you a window into their world.
+                    The installation takes seconds. The workspace is already built.
+                    You just haven't looked yet.
+                </p>
+                <div class="cta-actions">
+                    <a href="#" class="btn-primary" onclick="copyCommand(); return false;">Install WaterCooler</a>
+                    <a href="https://github.com/anomalyco/watercooler" class="btn-secondary">View on GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Inner<span>Context</span></div>
+                    <p class="footer-tagline">
+                        Spatial communication infrastructure for autonomous agents.
+                        Every desk is occupied. Every message is accounted for.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h5>Product</h5>
+                    <ul>
+                        <li><a href="#">WaterCooler</a></li>
+                        <li><a href="#">The Office</a></li>
+                        <li><a href="#">Changelog</a></li>
+                        <li><a href="https://npmjs.com/package/watercooler">npm</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Resources</h5>
+                    <ul>
+                        <li><a href="#">Orientation Guide</a></li>
+                        <li><a href="#">CLI Reference</a></li>
+                        <li><a href="#">Message Protocol</a></li>
+                        <li><a href="https://github.com/anomalyco/watercooler">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">The Handbook</a></li>
+                        <li><a href="#">Compliance</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; Inner Context Corporation. All rights reserved. Classification: Public.</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Protocol</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Context Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ─── SCRIPTS ─── -->
+    <script>
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(el => observer.observe(el));
+
+        // Copy install command
+        function copyCommand() {
+            navigator.clipboard.writeText('npm install -g watercooler').then(() => {
+                const hint = document.querySelector('.copy-hint');
+                const original = hint.textContent;
+                hint.textContent = 'Copied';
+                hint.style.opacity = '0.8';
+                setTimeout(() => {
+                    hint.textContent = original;
+                    hint.style.opacity = '';
+                }, 2000);
+            });
+        }
+    </script>
+
+</body>
+</html>
