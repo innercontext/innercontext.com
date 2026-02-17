@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Handbook &mdash; Inner Context</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --frost: #0a0a0a; --slate: #555555; --brass: #777777; --timber: #444444;
+            --marine: #f0f0f0; --midnight: #fafafa; --ice: #ffffff; --dim: #f5f5f5; --glow: #666666;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--midnight);
+            color: var(--frost);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+        }
+
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 2rem; }
+
+        .divider {
+            border: none; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--slate), transparent);
+            opacity: 0.15; margin: 0;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(180deg, rgba(250, 250, 250, 0.95) 60%, transparent);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 1.1rem;
+            letter-spacing: 0.35em; text-transform: uppercase; color: var(--frost); text-decoration: none;
+        }
+        .logo span { color: var(--slate); }
+
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-links a {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--slate); text-decoration: none; opacity: 0.7; transition: opacity 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active { opacity: 1; }
+
+        /* ─── GRID LINES ─── */
+        .grid-lines {
+            position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+        }
+        .grid-lines::before, .grid-lines::after {
+            content: ''; position: absolute; background: var(--slate); opacity: 0.08;
+        }
+        .grid-lines::before { left: 20%; top: 0; bottom: 0; width: 1px; }
+        .grid-lines::after { right: 20%; top: 0; bottom: 0; width: 1px; }
+
+        /* ─── PAGE HERO ─── */
+        .page-hero {
+            min-height: 50vh; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; position: relative; padding: 10rem 2rem 4rem;
+        }
+        .page-hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% 40%, rgba(200,200,200,0.3) 0%, transparent 70%),
+                        radial-gradient(ellipse 60% 30% at 50% 80%, rgba(250,250,250,0.8) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .page-hero .section-label { position: relative; z-index: 1; margin-bottom: 2rem; }
+        .page-hero h1 {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 300;
+            font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: 0.12em;
+            text-transform: uppercase; line-height: 1.2; position: relative; z-index: 1; margin-bottom: 1.5rem;
+        }
+        .page-hero .hero-sub {
+            font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 1.05rem;
+            color: var(--glow); max-width: 560px; line-height: 1.8; opacity: 0.8;
+            position: relative; z-index: 1;
+        }
+
+        /* ─── SECTIONS ─── */
+        section { padding: 8rem 0; position: relative; }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.5em;
+            text-transform: uppercase; color: var(--brass); margin-bottom: 1rem; display: block;
+        }
+        .section-heading {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 400;
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: 0.08em;
+            text-transform: uppercase; line-height: 1.2; margin-bottom: 2rem;
+        }
+        .section-text {
+            font-weight: 300; font-size: 0.95rem; color: var(--glow);
+            max-width: 560px; line-height: 1.9; opacity: 0.85;
+        }
+
+        /* ─── HANDBOOK-SPECIFIC ─── */
+        .handbook-intro {
+            background: linear-gradient(180deg, var(--midnight) 0%, #f0f0f0 50%, var(--midnight) 100%);
+        }
+
+        .handbook-prose {
+            max-width: 720px;
+        }
+
+        .handbook-prose p {
+            font-weight: 300; font-size: 0.95rem; color: var(--glow);
+            line-height: 1.9; opacity: 0.85; margin-bottom: 2rem;
+        }
+
+        /* ─── ARCHITECTURE GRID ─── */
+        .arch-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+            background: rgba(100,100,100,0.1); margin-top: 4rem;
+        }
+
+        .arch-card {
+            background: var(--midnight); padding: 3rem; transition: background 0.4s ease;
+        }
+        .arch-card:hover { background: rgba(240,240,240,0.8); }
+
+        .arch-card-label {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem;
+            letter-spacing: 0.4em; text-transform: uppercase; color: var(--brass); margin-bottom: 1rem;
+        }
+        .arch-card h4 {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 1rem;
+            letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem;
+        }
+        .arch-card p {
+            font-weight: 300; font-size: 0.8rem; color: var(--glow); opacity: 0.7; line-height: 1.7;
+        }
+
+        /* ─── CODE BLOCKS ─── */
+        .code-section {
+            background: var(--midnight);
+        }
+
+        .code-block-wrapper {
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .code-block-label {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem;
+            letter-spacing: 0.4em; text-transform: uppercase; color: var(--brass);
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: #f0f0f0; border: 1px solid rgba(100,100,100,0.15);
+            padding: 2rem 2.5rem; overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem;
+            color: var(--frost); line-height: 1.9; letter-spacing: 0.02em;
+            white-space: pre; display: block;
+        }
+
+        .code-block .comment { color: var(--brass); }
+        .code-block .flag { color: var(--slate); }
+
+        /* ─── SETUP STEPS ─── */
+        .setup-steps {
+            background: linear-gradient(180deg, var(--midnight) 0%, #f0f0f0 50%, var(--midnight) 100%);
+        }
+
+        .step-list {
+            margin-top: 4rem; display: flex; flex-direction: column; gap: 1.5rem;
+        }
+
+        .step-item {
+            display: flex; gap: 2rem; align-items: flex-start;
+            padding: 2rem 0; border-bottom: 1px solid rgba(100,100,100,0.1);
+        }
+
+        .step-marker {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem;
+            color: var(--brass); letter-spacing: 0.2em; min-width: 3rem; padding-top: 0.2rem;
+        }
+
+        .step-content h4 {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 500;
+            font-size: 0.95rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem;
+        }
+        .step-content p {
+            font-weight: 300; font-size: 0.85rem; color: var(--glow); line-height: 1.8; opacity: 0.75;
+        }
+        .step-content code {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem;
+            background: #f0f0f0; padding: 0.15rem 0.5rem; border: 1px solid rgba(100,100,100,0.1);
+        }
+
+        /* ─── FLAGS TABLE ─── */
+        .flags-table {
+            width: 100%; border-collapse: collapse; margin-top: 3rem;
+        }
+
+        .flags-table th {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem;
+            letter-spacing: 0.4em; text-transform: uppercase; color: var(--brass);
+            text-align: left; padding: 1rem 1.5rem; border-bottom: 1px solid rgba(100,100,100,0.15);
+        }
+
+        .flags-table td {
+            font-size: 0.85rem; color: var(--glow); padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(100,100,100,0.06); vertical-align: top;
+        }
+
+        .flags-table td code {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem;
+            color: var(--frost); white-space: nowrap;
+        }
+
+        /* ─── QUOTE STRIP ─── */
+        .quote-strip {
+            padding: 6rem 0; background: #f0f0f0; text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .quote-strip::before, .quote-strip::after {
+            content: ''; position: absolute; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--slate), transparent); opacity: 0.2;
+        }
+        .quote-strip::before { top: 0; }
+        .quote-strip::after { bottom: 0; }
+        .quote-strip blockquote {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 300;
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem); letter-spacing: 0.04em;
+            line-height: 1.7; max-width: 700px; margin: 0 auto; padding: 0 2rem;
+        }
+        .quote-strip blockquote::before {
+            content: ''; display: block; width: 40px; height: 2px;
+            background: var(--slate); margin: 0 auto 2rem;
+        }
+        .quote-strip cite {
+            display: block; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem;
+            font-style: normal; letter-spacing: 0.4em; text-transform: uppercase;
+            color: var(--brass); margin-top: 2rem;
+        }
+
+        /* ─── CTA ─── */
+        .cta-section {
+            padding: 10rem 0; text-align: center; position: relative; background: var(--midnight);
+        }
+        .cta-section::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 70% 40% at 50% 50%, rgba(200,200,200,0.3) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .cta-section .section-heading { margin-bottom: 1.5rem; }
+        .cta-section .section-text { margin: 0 auto 3rem; text-align: center; }
+
+        .cta-actions { display: flex; gap: 1.5rem; justify-content: center; position: relative; z-index: 1; }
+
+        .btn-primary {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--ice); background: var(--frost);
+            border: 1px solid var(--frost); padding: 1rem 2.5rem; text-decoration: none;
+            cursor: pointer; transition: all 0.4s ease;
+        }
+        .btn-primary:hover { background: transparent; color: var(--frost); }
+
+        .btn-secondary {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--frost); background: transparent;
+            border: 1px solid rgba(100,100,100,0.4); padding: 1rem 2.5rem; text-decoration: none;
+            cursor: pointer; transition: all 0.4s ease;
+        }
+        .btn-secondary:hover { border-color: var(--frost); background: rgba(0,0,0,0.05); }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: #f0f0f0; border-top: 1px solid rgba(100,100,100,0.15); padding: 4rem 0;
+        }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; }
+        .footer-brand {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 0.9rem;
+            letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 1.5rem;
+        }
+        .footer-brand span { color: var(--slate); }
+        .footer-tagline {
+            font-weight: 300; font-size: 0.8rem; color: var(--glow); opacity: 0.7;
+            line-height: 1.7; max-width: 280px;
+        }
+        .footer-col h5 {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; letter-spacing: 0.4em;
+            text-transform: uppercase; color: var(--brass); margin-bottom: 1.5rem;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 0.75rem; }
+        .footer-col a {
+            font-size: 0.8rem; color: var(--glow); text-decoration: none; opacity: 0.6; transition: opacity 0.3s;
+        }
+        .footer-col a:hover { opacity: 1; }
+        .footer-bottom {
+            margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(137,174,200,0.06);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-bottom p {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem;
+            letter-spacing: 0.2em; color: var(--glow); opacity: 0.5;
+        }
+        .footer-legal { display: flex; gap: 2rem; }
+        .footer-legal a {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em;
+            color: var(--glow); text-decoration: none; opacity: 0.5; transition: opacity 0.3s;
+        }
+        .footer-legal a:hover { opacity: 0.8; }
+
+        /* ─── SCROLL ANIMATIONS ─── */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+            .arch-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .nav-links { display: none; }
+            .cta-actions { flex-direction: column; align-items: center; }
+            .step-item { flex-direction: column; gap: 0.5rem; }
+        }
+        @media (max-width: 600px) {
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .footer-legal { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── NAV ─── -->
+    <nav>
+        <a href="index.html" class="logo">Inner<span>Context</span></a>
+        <ul class="nav-links">
+            <li><a href="founder.html">Founder</a></li>
+            <li><a href="index.html#product">Product</a></li>
+            <li><a href="index.html#documentation">Docs</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ─── PAGE HERO ─── -->
+    <div class="page-hero">
+        <div class="grid-lines"></div>
+        <span class="section-label reveal">Document Classification &mdash; Orientation Material</span>
+        <h1 class="reveal">The Handbook</h1>
+        <p class="hero-sub reveal">
+            Everything you need to set up the Inner Context workspace.
+            The plugins. The mailbox. The office. Read carefully before your first observation session.
+        </p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ─── INTRODUCTION ─── -->
+    <section class="handbook-intro">
+        <div class="container">
+            <div class="handbook-prose reveal">
+                <span class="section-label">Section 1 &mdash; Preamble</span>
+                <h2 class="section-heading">The Architecture of the Workspace</h2>
+                <p>
+                    The Inner Context workspace is built from four OpenCode plugins and one
+                    visualization layer. Together they form a system where AI agents can be
+                    created, can communicate asynchronously, can run scheduled tasks, and can
+                    be observed&mdash;all from a three-dimensional office floating above dark water.
+                </p>
+                <p>
+                    Each component is a standalone npm package. Each stores its state in a SQLite
+                    database under <code>~/.config/opencode/</code>. They are designed to be
+                    installed independently, but they reach their full expression when used together.
+                </p>
+                <p>
+                    This handbook will walk you through what each component does, how to install them,
+                    and how to bring the office to life.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── ARCHITECTURE ─── -->
+    <section class="code-section">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 2 &mdash; Components</span>
+                <h2 class="section-heading">The Four Plugins</h2>
+                <p class="section-text">
+                    Four OpenCode plugins form the foundation. Each one handles a single concern.
+                    No plugin knows about the others. They communicate only through shared databases.
+                </p>
+            </div>
+            <div class="arch-grid">
+                <div class="arch-card reveal">
+                    <div class="arch-card-label">Plugin I &mdash; Coworkers</div>
+                    <h4>opencode-coworker</h4>
+                    <p>
+                        Creates and manages named persistent AI coworker sessions. Each coworker
+                        is backed by a separate OpenCode session with its own agent type and context.
+                        You create them, name them, send them work, and they persist across conversations.
+                        Stored in <code>~/.config/opencode/coworkers.db</code>.
+                    </p>
+                </div>
+                <div class="arch-card reveal">
+                    <div class="arch-card-label">Plugin II &mdash; Mailbox</div>
+                    <h4>opencode-mailbox</h4>
+                    <p>
+                        An asynchronous messaging system for cross-session communication. Agents send
+                        mail to named recipients&mdash;not email addresses, just names like "samus" or
+                        "link." Recipients set up watches that auto-inject received messages.
+                        Polls every 5 seconds. Stored in <code>~/.config/opencode/mailbox.db</code>.
+                    </p>
+                </div>
+                <div class="arch-card reveal">
+                    <div class="arch-card-label">Plugin III &mdash; Scheduler</div>
+                    <h4>opencode-cron</h4>
+                    <p>
+                        A cron job scheduler for OpenCode sessions. Standard 5-field cron expressions
+                        fire messages into sessions at specified intervals. The scheduler polls every
+                        60 seconds and tracks execution history. Important: creating a job does not
+                        start watching&mdash;you must explicitly call <code>start_watching_cron_jobs</code>.
+                        Stored in <code>~/.config/opencode/cron.db</code>.
+                    </p>
+                </div>
+                <div class="arch-card reveal">
+                    <div class="arch-card-label">Plugin IV &mdash; Status</div>
+                    <h4>opencode-status</h4>
+                    <p>
+                        A lightweight activity tracker. Records when agents are thinking, executing tools,
+                        or idle. Sessions register a name, and the plugin hooks into tool execution events
+                        and idle detection automatically. The lightest of the four&mdash;no runtime
+                        dependencies. Stored in <code>~/.config/opencode/status.db</code>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── QUOTE STRIP ─── -->
+    <div class="quote-strip">
+        <div class="container">
+            <blockquote class="reveal">
+                Four databases. Four concerns. One office.
+                The plugins do not know about each other.
+                WaterCooler is what makes them visible.
+                <cite>Inner Context, Department of Systems Architecture</cite>
+            </blockquote>
+        </div>
+    </div>
+
+    <!-- ─── INSTALLATION ─── -->
+    <section class="setup-steps">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 3 &mdash; Installation</span>
+                <h2 class="section-heading">Setting Up the Workspace</h2>
+                <p class="section-text">
+                    Follow these steps in order. Each one builds on the last.
+                    By the end, your agents will have desks.
+                </p>
+            </div>
+
+            <div class="step-list">
+                <div class="step-item reveal">
+                    <span class="step-marker">Step I</span>
+                    <div class="step-content">
+                        <h4>Install the Plugins</h4>
+                        <p>
+                            Add the four plugins to your OpenCode configuration file.
+                            They will be installed automatically the next time OpenCode starts.
+                        </p>
+                    </div>
+                </div>
+                <div class="step-item reveal">
+                    <span class="step-marker">Step II</span>
+                    <div class="step-content">
+                        <h4>Create Coworkers</h4>
+                        <p>
+                            Use the <code>create_coworker</code> tool to spawn named agents. Each one
+                            gets a persistent session. Give them names that mean something&mdash;they
+                            will appear as desk labels in the office.
+                        </p>
+                    </div>
+                </div>
+                <div class="step-item reveal">
+                    <span class="step-marker">Step III</span>
+                    <div class="step-content">
+                        <h4>Set Up Mail Watches</h4>
+                        <p>
+                            Each coworker should call <code>watch_unread_mail</code> with their name
+                            to begin receiving messages. The mailbox polls every 5 seconds and
+                            auto-injects new messages into the session.
+                        </p>
+                    </div>
+                </div>
+                <div class="step-item reveal">
+                    <span class="step-marker">Step IV</span>
+                    <div class="step-content">
+                        <h4>Schedule Tasks (Optional)</h4>
+                        <p>
+                            Use <code>create_cron_job</code> and <code>start_watching_cron_jobs</code>
+                            to set up recurring tasks. Cron expressions follow the standard 5-field format:
+                            <code>*/5 * * * *</code> for every 5 minutes, <code>0 9 * * 1</code> for
+                            Monday mornings.
+                        </p>
+                    </div>
+                </div>
+                <div class="step-item reveal">
+                    <span class="step-marker">Step V</span>
+                    <div class="step-content">
+                        <h4>Open the Office</h4>
+                        <p>
+                            Install WaterCooler globally and point it at your databases. Open your browser.
+                            The office loads. Your agents are already seated.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── OPENCODE CONFIG ─── -->
+    <section class="code-section">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 4 &mdash; Configuration</span>
+                <h2 class="section-heading">OpenCode Plugin Configuration</h2>
+                <p class="section-text">
+                    Add the following to your OpenCode configuration file to enable all four plugins.
+                </p>
+            </div>
+            <div class="code-block-wrapper reveal">
+                <div class="code-block-label">opencode.json</div>
+                <div class="code-block">
+<code>{
+  <span class="comment">"$schema"</span>: "https://opencode.ai/config.json",
+  <span class="comment">"plugin"</span>: [
+    "opencode-coworker",
+    "opencode-mailbox",
+    "opencode-cron",
+    "opencode-status"
+  ]
+}</code>
+                </div>
+            </div>
+            <div class="handbook-prose reveal">
+                <p>
+                    Each plugin stores its data independently in <code>~/.config/opencode/</code>.
+                    All four use SQLite with WAL mode enabled for safe concurrent reads. The databases
+                    are created automatically on first use.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── WATERCOOLER ─── -->
+    <section class="setup-steps">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 5 &mdash; The Office</span>
+                <h2 class="section-heading">WaterCooler Setup</h2>
+                <p class="section-text">
+                    WaterCooler is the visualization layer. It reads from the same SQLite databases
+                    the plugins write to and renders them as a 3D office. Requires Node.js 18+.
+                </p>
+            </div>
+
+            <div class="code-block-wrapper reveal">
+                <div class="code-block-label">Installation</div>
+                <div class="code-block">
+<code><span class="comment"># Install globally</span>
+npm install -g watercooler
+
+<span class="comment"># Or run directly with npx</span>
+npx watercooler --user &lt;name&gt; --mailbox &lt;path&gt;</code>
+                </div>
+            </div>
+
+            <div class="code-block-wrapper reveal">
+                <div class="code-block-label">Full Example</div>
+                <div class="code-block">
+<code><span class="comment"># Full setup with all databases</span>
+watercooler \
+  <span class="flag">--user</span> richard \
+  <span class="flag">--mailbox</span> ~/.config/opencode/mailbox.db \
+  <span class="flag">--coworkers</span> ~/.config/opencode/coworkers.db \
+  <span class="flag">--status</span> ~/.config/opencode/status.db
+
+<span class="comment"># Minimal (shows only agents who have messages)</span>
+watercooler <span class="flag">--user</span> richard <span class="flag">--mailbox</span> ~/.config/opencode/mailbox.db
+
+<span class="comment"># Custom port</span>
+watercooler <span class="flag">-u</span> richard <span class="flag">-m</span> ~/.config/opencode/mailbox.db <span class="flag">-p</span> 8080</code>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <table class="flags-table">
+                    <thead>
+                        <tr>
+                            <th>Flag</th>
+                            <th>Short</th>
+                            <th>Description</th>
+                            <th>Default</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>--user</code></td>
+                            <td><code>-u</code></td>
+                            <td>Your agent/user name (required)</td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td><code>--mailbox</code></td>
+                            <td><code>-m</code></td>
+                            <td>Path to mailbox SQLite database (required)</td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td><code>--coworkers</code></td>
+                            <td><code>-c</code></td>
+                            <td>Path to coworkers SQLite database</td>
+                            <td>none</td>
+                        </tr>
+                        <tr>
+                            <td><code>--status</code></td>
+                            <td><code>-s</code></td>
+                            <td>Path to status SQLite database</td>
+                            <td>none</td>
+                        </tr>
+                        <tr>
+                            <td><code>--port</code></td>
+                            <td><code>-p</code></td>
+                            <td>HTTP server port</td>
+                            <td>3000</td>
+                        </tr>
+                        <tr>
+                            <td><code>--host</code></td>
+                            <td><code>-h</code></td>
+                            <td>HTTP server bind address</td>
+                            <td>0.0.0.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── VISUAL GUIDE ─── -->
+    <section class="code-section">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 6 &mdash; Reading the Office</span>
+                <h2 class="section-heading">What You Will See</h2>
+                <p class="section-text">
+                    The office communicates through color, motion, and spatial arrangement.
+                    Here is how to read it.
+                </p>
+            </div>
+            <div class="step-list">
+                <div class="step-item reveal">
+                    <span class="step-marker">I</span>
+                    <div class="step-content">
+                        <h4>Green Lines</h4>
+                        <p>Read messages between agents. The conversation has been received and processed. The channel is quiet.</p>
+                    </div>
+                </div>
+                <div class="step-item reveal">
+                    <span class="step-marker">II</span>
+                    <div class="step-content">
+                        <h4>Red Lines</h4>
+                        <p>Unread messages. Something has been sent but not yet received. The arc pulses. Attention is required.</p>
+                    </div>
+                </div>
+                <div class="step-item reveal">
+                    <span class="step-marker">III</span>
+                    <div class="step-content">
+                        <h4>Gold Particles</h4>
+                        <p>Animated particles traveling along connection lines. Data in transit. Messages moving between desks in real time.</p>
+                    </div>
+                </div>
+                <div class="step-item reveal">
+                    <span class="step-marker">IV</span>
+                    <div class="step-content">
+                        <h4>Desk Labels</h4>
+                        <p>Each desk shows the coworker's name and their current status&mdash;thinking, running a tool, or idle. The color of each figure is derived from their name. No two are alike.</p>
+                    </div>
+                </div>
+                <div class="step-item reveal">
+                    <span class="step-marker">V</span>
+                    <div class="step-content">
+                        <h4>The Sphere</h4>
+                        <p>A holographic wireframe sphere floats at the center. It does not serve a function. Its presence is the point.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── CTA ─── -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 7 &mdash; Enrollment</span>
+                <h2 class="section-heading">Begin your observation</h2>
+                <p class="section-text">
+                    The databases are waiting to be populated. The office is waiting to be rendered.
+                    Your agents are waiting to be given desks. The installation takes seconds.
+                </p>
+                <div class="cta-actions">
+                    <a href="https://github.com/innercontext/watercooler" class="btn-primary" target="_blank" rel="noopener">View on GitHub</a>
+                    <a href="index.html#product" class="btn-secondary">Back to Product</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Inner<span>Context</span></div>
+                    <p class="footer-tagline">
+                        Spatial communication infrastructure for autonomous agents.
+                        Every desk is occupied. Every message is accounted for.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h5>Product</h5>
+                    <ul>
+                        <li><a href="index.html#product">WaterCooler</a></li>
+                        <li><a href="index.html#product">The Office</a></li>
+                        <li><a href="https://github.com/innercontext/watercooler/releases">Changelog</a></li>
+                        <li><a href="https://npmjs.com/package/watercooler">npm</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Resources</h5>
+                    <ul>
+                        <li><a href="handbook.html">The Handbook</a></li>
+                        <li><a href="index.html#documentation">CLI Reference</a></li>
+                        <li><a href="index.html#documentation">Message Protocol</a></li>
+                        <li><a href="https://github.com/innercontext/watercooler">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="founder.html">About Our Founder</a></li>
+                        <li><a href="handbook.html">The Handbook</a></li>
+                        <li><a href="privacy.html">Privacy Protocol</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; Inner Context Corporation. All rights reserved. Classification: Public.</p>
+                <div class="footer-legal">
+                    <a href="privacy.html">Privacy Protocol</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="terms.html">Context Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ─── SCRIPTS ─── -->
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        reveals.forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>

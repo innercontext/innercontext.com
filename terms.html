@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service &mdash; Inner Context</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --frost: #0a0a0a; --slate: #555555; --brass: #777777; --timber: #444444;
+            --marine: #f0f0f0; --midnight: #fafafa; --ice: #ffffff; --dim: #f5f5f5; --glow: #666666;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif; background-color: var(--midnight);
+            color: var(--frost); overflow-x: hidden; line-height: 1.6;
+        }
+
+        body::after {
+            content: ''; position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 9999; opacity: 0.04;
+        }
+
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 2rem; }
+
+        .divider {
+            border: none; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--slate), transparent);
+            opacity: 0.15; margin: 0;
+        }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(180deg, rgba(250,250,250,0.95) 60%, transparent);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        }
+        .logo {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 1.1rem;
+            letter-spacing: 0.35em; text-transform: uppercase; color: var(--frost); text-decoration: none;
+        }
+        .logo span { color: var(--slate); }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-links a {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--slate); text-decoration: none; opacity: 0.7; transition: opacity 0.3s;
+        }
+        .nav-links a:hover { opacity: 1; }
+
+        .grid-lines { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+        .grid-lines::before, .grid-lines::after {
+            content: ''; position: absolute; background: var(--slate); opacity: 0.08;
+        }
+        .grid-lines::before { left: 20%; top: 0; bottom: 0; width: 1px; }
+        .grid-lines::after { right: 20%; top: 0; bottom: 0; width: 1px; }
+
+        .page-hero {
+            min-height: 45vh; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; position: relative; padding: 10rem 2rem 4rem;
+        }
+        .page-hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% 40%, rgba(200,200,200,0.3) 0%, transparent 70%),
+                        radial-gradient(ellipse 60% 30% at 50% 80%, rgba(250,250,250,0.8) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .page-hero .section-label { position: relative; z-index: 1; margin-bottom: 2rem; }
+        .page-hero h1 {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 300;
+            font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: 0.12em;
+            text-transform: uppercase; line-height: 1.2; position: relative; z-index: 1; margin-bottom: 1.5rem;
+        }
+        .page-hero .hero-sub {
+            font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 1.05rem;
+            color: var(--glow); max-width: 560px; line-height: 1.8; opacity: 0.8; position: relative; z-index: 1;
+        }
+
+        section { padding: 6rem 0; position: relative; }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.5em;
+            text-transform: uppercase; color: var(--brass); margin-bottom: 1rem; display: block;
+        }
+
+        .legal-content { max-width: 720px; }
+
+        .legal-content h2 {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.4rem;
+            letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem; margin-top: 4rem;
+        }
+        .legal-content h2:first-of-type { margin-top: 0; }
+
+        .legal-content p {
+            font-weight: 300; font-size: 0.9rem; color: var(--glow);
+            line-height: 1.9; opacity: 0.85; margin-bottom: 1.5rem;
+        }
+
+        .legal-content ul {
+            list-style: none; margin-bottom: 1.5rem; padding-left: 0;
+        }
+
+        .legal-content li {
+            font-weight: 300; font-size: 0.9rem; color: var(--glow);
+            line-height: 1.9; opacity: 0.85; padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem;
+        }
+
+        .legal-content li::before {
+            content: '\2014'; position: absolute; left: 0; color: var(--brass);
+        }
+
+        .legal-content code {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem;
+            background: #f0f0f0; padding: 0.1rem 0.4rem; border: 1px solid rgba(100,100,100,0.1);
+        }
+
+        .legal-effective {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem;
+            letter-spacing: 0.3em; text-transform: uppercase; color: var(--brass);
+            margin-bottom: 3rem; display: block;
+        }
+
+        footer {
+            background: #f0f0f0; border-top: 1px solid rgba(100,100,100,0.15); padding: 4rem 0;
+        }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; }
+        .footer-brand {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 0.9rem;
+            letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 1.5rem;
+        }
+        .footer-brand span { color: var(--slate); }
+        .footer-tagline {
+            font-weight: 300; font-size: 0.8rem; color: var(--glow); opacity: 0.7; line-height: 1.7; max-width: 280px;
+        }
+        .footer-col h5 {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; letter-spacing: 0.4em;
+            text-transform: uppercase; color: var(--brass); margin-bottom: 1.5rem;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 0.75rem; }
+        .footer-col a { font-size: 0.8rem; color: var(--glow); text-decoration: none; opacity: 0.6; transition: opacity 0.3s; }
+        .footer-col a:hover { opacity: 1; }
+        .footer-bottom {
+            margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(137,174,200,0.06);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-bottom p {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--glow); opacity: 0.5;
+        }
+        .footer-legal { display: flex; gap: 2rem; }
+        .footer-legal a {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em;
+            color: var(--glow); text-decoration: none; opacity: 0.5; transition: opacity 0.3s;
+        }
+        .footer-legal a:hover { opacity: 0.8; }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 900px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .nav-links { display: none; }
+        }
+        @media (max-width: 600px) {
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .footer-legal { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">Inner<span>Context</span></a>
+        <ul class="nav-links">
+            <li><a href="founder.html">Founder</a></li>
+            <li><a href="index.html#product">Product</a></li>
+            <li><a href="index.html#documentation">Docs</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-hero">
+        <div class="grid-lines"></div>
+        <span class="section-label reveal">Legal &mdash; Classification: Public</span>
+        <h1 class="reveal">Terms of Service</h1>
+        <p class="hero-sub reveal">
+            The terms under which Inner Context software is provided.
+            They are brief because the software is simple and the license is open.
+        </p>
+    </div>
+
+    <hr class="divider">
+
+    <section>
+        <div class="container">
+            <div class="legal-content reveal">
+                <span class="legal-effective">Effective Date &mdash; February 2026</span>
+
+                <h2>License</h2>
+                <p>
+                    All Inner Context software&mdash;including WaterCooler, opencode-coworker,
+                    opencode-mailbox, opencode-cron, and opencode-status&mdash;is released under
+                    the MIT License. You are free to use, copy, modify, merge, publish, distribute,
+                    sublicense, and sell copies of the software, subject to the conditions of that license.
+                </p>
+
+                <h2>The Software Is Provided "As Is"</h2>
+                <p>
+                    Inner Context software is provided without warranty of any kind, express or implied,
+                    including but not limited to the warranties of merchantability, fitness for a
+                    particular purpose, and noninfringement. In no event shall the authors or copyright
+                    holders be liable for any claim, damages, or other liability arising from the software.
+                </p>
+
+                <h2>Your Data</h2>
+                <p>
+                    All data generated by Inner Context products is stored locally on your machine.
+                    You own it completely. We have no access to it. See our
+                    <a href="privacy.html" style="color: var(--frost); text-decoration: underline;">Privacy Protocol</a>
+                    for details.
+                </p>
+
+                <h2>Local Network Access</h2>
+                <p>
+                    WaterCooler runs a local HTTP server that, by default, binds to all network
+                    interfaces (<code>0.0.0.0</code>). This means other devices on your local network
+                    may be able to access the office interface. You are responsible for configuring
+                    the <code>--host</code> flag appropriately for your environment. We recommend
+                    <code>--host 127.0.0.1</code> if you wish to restrict access to your machine only.
+                </p>
+
+                <h2>Third-Party Dependencies</h2>
+                <p>
+                    Inner Context software depends on open-source packages distributed through npm.
+                    These dependencies are governed by their own licenses. The WaterCooler frontend
+                    loads Three.js and marked.js from cdn.jsdelivr.net. We do not control these
+                    services and are not responsible for their availability or content.
+                </p>
+
+                <h2>Contributions</h2>
+                <p>
+                    Contributions to Inner Context open-source projects are welcome and are accepted
+                    under the same MIT License. By submitting a pull request, you agree that your
+                    contribution may be distributed under that license.
+                </p>
+
+                <h2>Changes to These Terms</h2>
+                <p>
+                    We may update these terms from time to time. Changes will be reflected on this
+                    page with an updated effective date. Continued use of the software after changes
+                    constitutes acceptance of the new terms.
+                </p>
+
+                <h2>Contact</h2>
+                <p>
+                    Questions about these terms may be directed through the channels listed on our
+                    <a href="contact.html" style="color: var(--frost); text-decoration: underline;">contact page</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Inner<span>Context</span></div>
+                    <p class="footer-tagline">
+                        Spatial communication infrastructure for autonomous agents.
+                        Every desk is occupied. Every message is accounted for.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h5>Product</h5>
+                    <ul>
+                        <li><a href="index.html#product">WaterCooler</a></li>
+                        <li><a href="index.html#product">The Office</a></li>
+                        <li><a href="https://github.com/innercontext/watercooler/releases">Changelog</a></li>
+                        <li><a href="https://npmjs.com/package/watercooler">npm</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Resources</h5>
+                    <ul>
+                        <li><a href="handbook.html">The Handbook</a></li>
+                        <li><a href="index.html#documentation">CLI Reference</a></li>
+                        <li><a href="index.html#documentation">Message Protocol</a></li>
+                        <li><a href="https://github.com/innercontext/watercooler">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="founder.html">About Our Founder</a></li>
+                        <li><a href="handbook.html">The Handbook</a></li>
+                        <li><a href="privacy.html">Privacy Protocol</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; Inner Context Corporation. All rights reserved. Classification: Public.</p>
+                <div class="footer-legal">
+                    <a href="privacy.html">Privacy Protocol</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="terms.html">Context Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        reveals.forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>

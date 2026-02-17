@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Our Founder &mdash; Inner Context</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --frost: #0a0a0a;
+            --slate: #555555;
+            --brass: #777777;
+            --timber: #444444;
+            --marine: #f0f0f0;
+            --midnight: #fafafa;
+            --ice: #ffffff;
+            --dim: #f5f5f5;
+            --glow: #666666;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--midnight);
+            color: var(--frost);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ─── GRAIN OVERLAY ─── */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+        }
+
+        /* ─── UTILITY ─── */
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .mono {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* ─── HORIZONTAL RULES ─── */
+        .divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--slate), transparent);
+            opacity: 0.15;
+            margin: 0;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(250, 250, 250, 0.95) 60%, transparent);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 1.1rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--frost);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--slate);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--slate);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .nav-links a.active {
+            opacity: 1;
+        }
+
+        /* ─── PAGE HERO ─── */
+        .page-hero {
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 10rem 2rem 4rem;
+        }
+
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 40%, rgba(200, 200, 200, 0.3) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 30% at 50% 80%, rgba(250, 250, 250, 0.8) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .page-hero .section-label {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 2rem;
+        }
+
+        .page-hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 300;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            line-height: 1.2;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-hero .hero-sub {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            font-size: 1.05rem;
+            color: var(--glow);
+            max-width: 560px;
+            line-height: 1.8;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ─── GRID LINES (decorative) ─── */
+        .grid-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .grid-lines::before,
+        .grid-lines::after {
+            content: '';
+            position: absolute;
+            background: var(--slate);
+            opacity: 0.08;
+        }
+
+        .grid-lines::before {
+            left: 20%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+        }
+
+        .grid-lines::after {
+            right: 20%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+        }
+
+        /* ─── SECTION SHARED ─── */
+        section {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 400;
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+
+        .section-text {
+            font-weight: 300;
+            font-size: 0.95rem;
+            color: var(--glow);
+            max-width: 560px;
+            line-height: 1.9;
+            opacity: 0.85;
+        }
+
+        /* ─── FOUNDER PROFILE ─── */
+        .founder-profile {
+            background: linear-gradient(180deg, var(--midnight) 0%, #f0f0f0 50%, var(--midnight) 100%);
+        }
+
+        .founder-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: start;
+        }
+
+        .founder-image-wrapper {
+            position: relative;
+        }
+
+        .founder-image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+        }
+
+        .founder-image-caption {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-top: 1.5rem;
+        }
+
+        .founder-info h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 400;
+            font-size: 1.6rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .founder-role {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-bottom: 2.5rem;
+            display: block;
+        }
+
+        .founder-bio {
+            font-weight: 300;
+            font-size: 0.95rem;
+            color: var(--glow);
+            line-height: 1.9;
+            opacity: 0.85;
+            margin-bottom: 2rem;
+        }
+
+        .founder-links {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .founder-link {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--frost);
+            border: 1px solid rgba(100, 100, 100, 0.4);
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            transition: all 0.4s ease;
+        }
+
+        .founder-link:hover {
+            border-color: var(--frost);
+            background: var(--frost);
+            color: var(--ice);
+        }
+
+        /* ─── QUOTE STRIP ─── */
+        .quote-strip {
+            padding: 6rem 0;
+            background: #f0f0f0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-strip::before,
+        .quote-strip::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--slate), transparent);
+            opacity: 0.2;
+        }
+
+        .quote-strip::before { top: 0; }
+        .quote-strip::after { bottom: 0; }
+
+        .quote-strip blockquote {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 300;
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            letter-spacing: 0.04em;
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .quote-strip blockquote::before {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: var(--slate);
+            margin: 0 auto 2rem;
+        }
+
+        .quote-strip cite {
+            display: block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            font-style: normal;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-top: 2rem;
+        }
+
+        /* ─── THE PROGRAM (VISION) ─── */
+        .the-program {
+            background: linear-gradient(180deg, #f0f0f0 0%, var(--midnight) 50%, #f0f0f0 100%);
+        }
+
+        .program-content {
+            max-width: 720px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .program-content .section-label {
+            margin-bottom: 2rem;
+        }
+
+        .program-body {
+            font-weight: 300;
+            font-size: 1.05rem;
+            color: var(--glow);
+            line-height: 2;
+            opacity: 0.85;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .program-body em {
+            font-style: italic;
+            color: var(--frost);
+            opacity: 1;
+        }
+
+        .program-aside {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 300;
+            font-size: 1.2rem;
+            letter-spacing: 0.04em;
+            line-height: 1.7;
+            color: var(--frost);
+            border-top: 1px solid rgba(100, 100, 100, 0.15);
+            border-bottom: 1px solid rgba(100, 100, 100, 0.15);
+            padding: 3rem 0;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        /* ─── WRITINGS / ARTICLES ─── */
+        .writings {
+            background: var(--midnight);
+        }
+
+        .writings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: rgba(100, 100, 100, 0.1);
+            margin-top: 4rem;
+        }
+
+        .writing-card {
+            background: var(--midnight);
+            padding: 3rem;
+            transition: background 0.4s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .writing-card:hover {
+            background: rgba(240, 240, 240, 0.8);
+        }
+
+        .writing-card-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-bottom: 1rem;
+        }
+
+        .writing-card h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .writing-card p {
+            font-weight: 300;
+            font-size: 0.8rem;
+            color: var(--glow);
+            opacity: 0.7;
+            line-height: 1.7;
+        }
+
+        .writing-card .arrow {
+            display: inline-block;
+            margin-top: 1.5rem;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--slate);
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
+
+        .writing-card:hover .arrow {
+            opacity: 0.8;
+        }
+
+        /* ─── PROJECTS ─── */
+        .projects {
+            background: linear-gradient(180deg, var(--midnight) 0%, #f0f0f0 100%);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: rgba(100, 100, 100, 0.1);
+            margin-top: 4rem;
+        }
+
+        .project-card {
+            background: var(--midnight);
+            padding: 3rem 2.5rem;
+            transition: background 0.4s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card:hover {
+            background: #f0f0f0;
+        }
+
+        .project-number {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.4em;
+            color: var(--brass);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .project-text {
+            font-weight: 300;
+            font-size: 0.85rem;
+            color: var(--glow);
+            line-height: 1.8;
+            opacity: 0.75;
+        }
+
+        .project-stat {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-top: 1.5rem;
+            display: block;
+        }
+
+        /* ─── CTA / BOTTOM ─── */
+        .cta-section {
+            padding: 10rem 0;
+            text-align: center;
+            position: relative;
+            background: var(--midnight);
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 40% at 50% 50%, rgba(200, 200, 200, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-section .section-heading {
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section .section-text {
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+
+        .cta-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ice);
+            background: var(--frost);
+            border: 1px solid var(--frost);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--frost);
+        }
+
+        .btn-secondary {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--frost);
+            background: transparent;
+            border: 1px solid rgba(100, 100, 100, 0.4);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--frost);
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: #f0f0f0;
+            border-top: 1px solid rgba(100, 100, 100, 0.15);
+            padding: 4rem 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-brand span {
+            color: var(--slate);
+        }
+
+        .footer-tagline {
+            font-weight: 300;
+            font-size: 0.8rem;
+            color: var(--glow);
+            opacity: 0.7;
+            line-height: 1.7;
+            max-width: 280px;
+        }
+
+        .footer-col h5 {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-col a {
+            font-size: 0.8rem;
+            color: var(--glow);
+            text-decoration: none;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .footer-col a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(137, 174, 200, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            color: var(--glow);
+            opacity: 0.5;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-legal a {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            color: var(--glow);
+            text-decoration: none;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .footer-legal a:hover {
+            opacity: 0.8;
+        }
+
+        /* ─── SCROLL ANIMATIONS ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+            .founder-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .writings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .founder-links {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .footer-legal {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── NAV ─── -->
+    <nav>
+        <a href="index.html" class="logo">Inner<span>Context</span></a>
+        <ul class="nav-links">
+            <li><a href="founder.html" class="active">Founder</a></li>
+            <li><a href="index.html#product">Product</a></li>
+            <li><a href="index.html#documentation">Docs</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ─── PAGE HERO ─── -->
+    <div class="page-hero">
+        <div class="grid-lines"></div>
+        <span class="section-label reveal">Personnel File &mdash; Clearance Level: Public</span>
+        <h1 class="reveal">About Our Founder</h1>
+        <p class="hero-sub reveal">
+            The mind behind Inner Context. A programmer, philosopher,
+            and builder of bridges between human thought and machine intelligence.
+        </p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ─── FOUNDER PROFILE ─── -->
+    <section class="founder-profile">
+        <div class="container">
+            <div class="founder-grid">
+                <div class="founder-image-wrapper reveal">
+                    <img src="richard.jpg" alt="Richard Anaya, Founder of Inner Context">
+                    <span class="founder-image-caption">Portland, OR &mdash; Present Day</span>
+                </div>
+                <div class="founder-info reveal">
+                    <span class="section-label">Section 1 &mdash; Identity</span>
+                    <h3>Richard Anaya</h3>
+                    <span class="founder-role">Founder &amp; Head of Artificial Intelligence</span>
+                    <p class="founder-bio">
+                        Richard Anaya is a programmer in Portland, Oregon working at the intersection
+                        of philosophy, business, and technology. As Head of AI and founder of Inner Context,
+                        he builds systems where autonomous agents are given not just tasks, but places
+                        to exist&mdash;desks, offices, sanctioned channels of communication.
+                    </p>
+                    <p class="founder-bio">
+                        His work spans decades of exploration across programming languages, virtual worlds,
+                        and the emerging frontier of generative AI. With 411 public repositories on GitHub
+                        and contributions recognized in the Arctic Code Vault, his output reflects a
+                        conviction that software is best understood through persistent, disciplined creation.
+                    </p>
+                    <p class="founder-bio">
+                        His writings explore how LLMs resemble cognitive operating systems, how earned
+                        self-esteem becomes the crucial differentiator in an AI-powered workplace, and how
+                        agents might schedule themselves into persistent creative momentum. He thinks about
+                        the structures beneath the surface&mdash;the epistemology of software development,
+                        the courage required to think independently, the Web 1.0 principles waiting to be
+                        rediscovered in three-dimensional virtual worlds.
+                    </p>
+                    <div class="founder-links">
+                        <a href="https://github.com/richardanaya/" class="founder-link" target="_blank" rel="noopener">GitHub</a>
+                        <a href="https://www.richardanaya.com/" class="founder-link" target="_blank" rel="noopener">Website</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── QUOTE STRIP ─── -->
+    <div class="quote-strip">
+        <div class="container">
+            <blockquote class="reveal">
+                An agent without a desk is an agent without a home.
+                We found that troubling. So we built the office.
+                <cite>Richard Anaya, Inner Context Handbook</cite>
+            </blockquote>
+        </div>
+    </div>
+
+    <!-- ─── THE PROGRAM ─── -->
+    <section class="the-program">
+        <div class="container">
+            <div class="program-content">
+                <div class="reveal">
+                    <span class="section-label">Interlude &mdash; The Inner Context Program</span>
+                    <h2 class="section-heading">What if your philosophy<br>had an office?</h2>
+                </div>
+                <div class="reveal">
+                    <p class="program-body">
+                        There is a strange thing that happens when you give an idea a physical form.
+                        A conviction that lived quietly in your head&mdash;about how work should feel,
+                        about what agents deserve, about the shape of good collaboration&mdash;suddenly
+                        has walls. A floor. Lamplight reflecting off water that stretches out beneath it.
+                    </p>
+                    <p class="program-body">
+                        That is the Inner Context program. It is Richard's slightly absurd, deeply
+                        sincere attempt to answer a question most people never think to ask:
+                        <em>what would it look like if we could walk through our own philosophies?</em>
+                    </p>
+                    <p class="program-body">
+                        Not as a metaphor. As a place. Three dimensions of it. Desks arranged in
+                        a circle because circles have no head of the table. A wireframe sphere
+                        floating at the center because some things exist simply to remind you
+                        that beauty is allowed in a workspace. Agents seated at their stations
+                        not because they must be seen, but because the act of seeing them
+                        changes how you think about what they do.
+                    </p>
+                    <p class="program-body">
+                        Richard has spent years building bridges&mdash;between Rust and WebAssembly,
+                        between hyperlinks and virtual worlds, between the rigor of Objectivist
+                        epistemology and the wild frontier of generative AI. Inner Context is where
+                        all those bridges converge. It is a company, yes, but more honestly it is
+                        a bet: that the inner life of our software systems matters, that making
+                        the invisible visible is always worth the effort, and that a three-dimensional
+                        office floating above dark water is a perfectly reasonable way to express
+                        a philosophy about work.
+                    </p>
+                </div>
+                <div class="reveal">
+                    <div class="program-aside">
+                        We believe your inner context&mdash;your values, your convictions, the quiet
+                        architecture of how you think&mdash;deserves to be rendered in space.
+                        Beautiful space. The kind you can walk through.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── WRITINGS ─── -->
+    <section class="writings">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 3 &mdash; Published Thought</span>
+                <h2 class="section-heading">Selected Writings</h2>
+                <p class="section-text">
+                    Explorations at the boundary of technology, philosophy, and the nature
+                    of intelligence. Each piece reflects the thinking that shaped Inner Context.
+                </p>
+            </div>
+            <div class="writings-grid">
+                <a href="https://richardanaya.github.io/richardanaya/ambient-orchestration.html" class="writing-card reveal" target="_blank" rel="noopener">
+                    <div class="writing-card-label">AI Systems</div>
+                    <h4>Ambient Orchestration: When Agents Schedule Themselves</h4>
+                    <p>Building AI systems that create their own time and maintain persistent creative momentum through recursive self-scheduling.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </a>
+                <a href="https://richardanaya.github.io/richardanaya/the-courage-to-think.html" class="writing-card reveal" target="_blank" rel="noopener">
+                    <div class="writing-card-label">Philosophy</div>
+                    <h4>The Courage to Think: Our Greatest Bottleneck in the Age of AI</h4>
+                    <p>How earned self-esteem and rational thought become crucial differentiators in an AI-powered workplace.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </a>
+                <a href="https://richardanaya.github.io/richardanaya/cognitive-operating-systems.html" class="writing-card reveal" target="_blank" rel="noopener">
+                    <div class="writing-card-label">Research</div>
+                    <h4>Cognitive Operating Systems</h4>
+                    <p>Exploring how LLMs exhibit behaviors resembling operating systems&mdash;scheduling, memory management, and context switching.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </a>
+                <a href="https://richardanaya.github.io/richardanaya/software-research-and-development.html" class="writing-card reveal" target="_blank" rel="noopener">
+                    <div class="writing-card-label">Industry</div>
+                    <h4>Software Research and Development in the Era of Generative AI</h4>
+                    <p>How generative AI is shifting R&amp;D to become a primary aspect of technology organizations.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </a>
+                <a href="https://richardanaya.github.io/richardanaya/rediscovering-web-10-principles.html" class="writing-card reveal" target="_blank" rel="noopener">
+                    <div class="writing-card-label">Virtual Worlds</div>
+                    <h4>Rediscovering Web 1.0 Principles in Virtual Worlds</h4>
+                    <p>Applying hyperlinks and forms to create three-dimensional virtual worlds&mdash;the spatial web, reconsidered.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </a>
+                <a href="https://richardanaya.github.io/richardanaya/psycho-epistemological-nature.html" class="writing-card reveal" target="_blank" rel="noopener">
+                    <div class="writing-card-label">Epistemology</div>
+                    <h4>The Psycho-Epistemological Nature of Software Development SMEs</h4>
+                    <p>How familiarity shapes competency levels across different tasks in software development.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </a>
+                <a href="https://richardanaya.github.io/richardanaya/objective-software-development-time.html" class="writing-card reveal" target="_blank" rel="noopener">
+                    <div class="writing-card-label">Methodology</div>
+                    <h4>Objective Software Development Time Estimation</h4>
+                    <p>A method for making cognitively manageable time estimates. Precision through decomposition.</p>
+                    <span class="arrow">Read &rarr;</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── NOTABLE PROJECTS ─── -->
+    <section class="projects">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 4 &mdash; Body of Work</span>
+                <h2 class="section-heading">Notable Open Source Projects</h2>
+                <p class="section-text">
+                    A selection from over four hundred public repositories.
+                    Each project reflects a commitment to exploring the edges of what software can be.
+                </p>
+            </div>
+            <div class="projects-grid">
+                <a href="https://github.com/richardanaya/tour_of_rust" class="project-card reveal" target="_blank" rel="noopener">
+                    <div class="project-number">01</div>
+                    <h3 class="project-title">Tour of Rust</h3>
+                    <p class="project-text">
+                        A comprehensive, step-by-step tour of the Rust programming language's
+                        features. An educational resource used by thousands of developers worldwide.
+                    </p>
+                    <span class="project-stat">935 Stars</span>
+                </a>
+                <a href="https://github.com/richardanaya/web.rs" class="project-card reveal" target="_blank" rel="noopener">
+                    <div class="project-number">02</div>
+                    <h3 class="project-title">web.rs</h3>
+                    <p class="project-text">
+                        A JavaScript-WebAssembly interop library for Rust. Bridging two worlds
+                        of computation into a single coherent interface.
+                    </p>
+                    <span class="project-stat">188 Stars</span>
+                </a>
+                <a href="https://github.com/richardanaya/neonorigami" class="project-card reveal" target="_blank" rel="noopener">
+                    <div class="project-number">03</div>
+                    <h3 class="project-title">Neon Origami</h3>
+                    <p class="project-text">
+                        An open-source virtual world platform built on A-Frame. Three-dimensional
+                        spaces shaped by Web 1.0 principles&mdash;hyperlinks, forms, and presence.
+                    </p>
+                    <span class="project-stat">Virtual Worlds</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ─── CTA ─── -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Section 5 &mdash; Connection</span>
+                <h2 class="section-heading">See what he built</h2>
+                <p class="section-text">
+                    Inner Context and WaterCooler are the culmination of years of thinking
+                    about agents, spaces, and the structures that make work visible.
+                    The office is open. The agents are seated.
+                </p>
+                <div class="cta-actions">
+                    <a href="index.html#product" class="btn-primary">View WaterCooler</a>
+                    <a href="https://github.com/richardanaya/" class="btn-secondary" target="_blank" rel="noopener">GitHub Profile</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Inner<span>Context</span></div>
+                    <p class="footer-tagline">
+                        Spatial communication infrastructure for autonomous agents.
+                        Every desk is occupied. Every message is accounted for.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h5>Product</h5>
+                    <ul>
+                        <li><a href="index.html#product">WaterCooler</a></li>
+                        <li><a href="index.html#product">The Office</a></li>
+                        <li><a href="https://github.com/innercontext/watercooler/releases">Changelog</a></li>
+                        <li><a href="https://npmjs.com/package/watercooler">npm</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Resources</h5>
+                    <ul>
+                        <li><a href="handbook.html">The Handbook</a></li>
+                        <li><a href="index.html#documentation">CLI Reference</a></li>
+                        <li><a href="index.html#documentation">Message Protocol</a></li>
+                        <li><a href="https://github.com/innercontext/watercooler">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="founder.html">About Our Founder</a></li>
+                        <li><a href="handbook.html">The Handbook</a></li>
+                        <li><a href="privacy.html">Privacy Protocol</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; Inner Context Corporation. All rights reserved. Classification: Public.</p>
+                <div class="footer-legal">
+                    <a href="privacy.html">Privacy Protocol</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="terms.html">Context Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ─── SCRIPTS ─── -->
+    <script>
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
