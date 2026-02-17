@@ -655,10 +655,18 @@
             padding: 3rem;
             transition: background 0.4s ease;
             cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
 
         .doc-card:hover {
             background: rgba(240, 240, 240, 0.8);
+        }
+
+        .doc-card:hover h4,
+        .doc-card:hover p {
+            color: inherit;
         }
 
         .doc-card-label {
@@ -953,7 +961,7 @@
         <ul class="nav-links">
             <li><a href="founder.html">Founder</a></li>
             <li><a href="#product">Product</a></li>
-            <li><a href="#documentation">Docs</a></li>
+            <li><a href="handbook.html">Docs</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -1180,30 +1188,30 @@
                 </p>
             </div>
             <div class="docs-grid">
-                <div class="doc-card reveal">
+                <a href="handbook.html" class="doc-card reveal">
                     <div class="doc-card-label">Orientation</div>
                     <h4>Getting Started</h4>
                     <p>Install WaterCooler. Point it at your mailbox. Specify your identity. The workspace will assemble itself. Please read in full before your first observation session.</p>
                     <span class="arrow">Read &rarr;</span>
-                </div>
-                <div class="doc-card reveal">
+                </a>
+                <a href="https://github.com/innercontext/watercooler#usage" class="doc-card reveal" target="_blank" rel="noopener">
                     <div class="doc-card-label">Reference</div>
                     <h4>CLI Configuration</h4>
                     <p>Flags for mailbox path, coworker database, status database, port, and host binding. Each parameter shapes the workspace you will observe.</p>
                     <span class="arrow">Read &rarr;</span>
-                </div>
-                <div class="doc-card reveal">
+                </a>
+                <a href="protocol.html" class="doc-card reveal">
                     <div class="doc-card-label">Protocol</div>
                     <h4>Message Frontmatter</h4>
                     <p>Messages may include YAML frontmatter with a choices field. When present, the recipient is offered decision buttons. The protocol is simple. Its implications are not.</p>
                     <span class="arrow">Read &rarr;</span>
-                </div>
-                <div class="doc-card reveal">
+                </a>
+                <a href="https://github.com/innercontext/watercooler/releases" class="doc-card reveal" target="_blank" rel="noopener">
                     <div class="doc-card-label">Bulletin</div>
                     <h4>Release History</h4>
                     <p>A record of sanctioned improvements across sixteen revisions. From simple desks to modern office. Each update brought us closer to the correct metaphor.</p>
                     <span class="arrow">Read &rarr;</span>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -1245,7 +1253,6 @@
                     <h5>Product</h5>
                     <ul>
                         <li><a href="#product">WaterCooler</a></li>
-                        <li><a href="#product">The Office</a></li>
                         <li><a href="https://github.com/innercontext/watercooler/releases">Changelog</a></li>
                         <li><a href="https://npmjs.com/package/watercooler">npm</a></li>
                     </ul>
@@ -1254,8 +1261,7 @@
                     <h5>Resources</h5>
                     <ul>
                         <li><a href="handbook.html">The Handbook</a></li>
-                        <li><a href="#documentation">CLI Reference</a></li>
-                        <li><a href="#documentation">Message Protocol</a></li>
+                        <li><a href="protocol.html">Message Protocol</a></li>
                         <li><a href="https://github.com/innercontext/watercooler">GitHub</a></li>
                     </ul>
                 </div>
@@ -1263,7 +1269,6 @@
                     <h5>Company</h5>
                     <ul>
                         <li><a href="founder.html">About Our Founder</a></li>
-                        <li><a href="handbook.html">The Handbook</a></li>
                         <li><a href="privacy.html">Privacy Protocol</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
